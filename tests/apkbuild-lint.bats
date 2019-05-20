@@ -27,6 +27,20 @@ assert_match() {
 	assert_match "${lines[0]}" "builddir"
 }
 
+@test 'cd \"\$builddir\" is not highlighted' {
+	cat <<-"EOF" >$apkbuild
+	pkgname=a
+	subpackages="py-${pkgname}:_py"
+
+	_py() {
+		cd "$builddir" # required
+	}
+	EOF
+
+	run $cmd $apkbuild
+	[[ $status -eq 0 ]]
+}
+
 @test 'cd \"$builddir\" after cd should be ignored' {
 	skip "false positive"
 	cat <<-"EOF" >$apkbuild
