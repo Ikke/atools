@@ -117,3 +117,139 @@ assert_match() {
 	[[ $status -eq 1 ]]
 	assert_match "${lines[0]}" "variable.*empty"
 }
+
+@test 'custom global variables should start with an underscore' {
+	cat <<-"EOF" >$apkbuild
+	pkgname=a
+	pkgver=1
+	foo=
+	EOF
+
+	run $cmd $apkbuild
+	[[ $status -eq 1 ]]
+	assert_match "${lines[0]}" "prefix.*_"
+}
+
+@test 'indentation should be with tabs' {
+	cat <<-"EOF" >$apkbuild
+	pkgname=a
+	pkgver=1
+
+	build() {
+        foo
+	}
+	EOF
+
+	run $cmd $apkbuild
+	[[ $status -eq 1 ]]
+	assert_match "${lines[0]}" "indent.*tabs"
+}
+
+@test 'trailing whitespace should be removed' {
+	cat <<-"EOF" >$apkbuild
+	pkgname=a
+	pkgver=1
+
+	build() {
+		foo 
+	}
+	EOF
+
+	run $cmd $apkbuild
+	[[ $status -eq 1 ]]
+	assert_match "${lines[0]}" "trailing whitespace"
+}
+
+@test 'prefer \$() to backticks' {
+	cat <<-"EOF" >$apkbuild
+	pkgname=a
+	pkgver=1
+
+	build() {
+		local a=`echo test`
+	}
+	EOF
+
+	run $cmd $apkbuild
+	[[ $status -eq 1 ]]
+	assert_match "${lines[0]}" "instead of backticks"
+}
+
+@test 'function keyword should not be used' {
+	cat <<-"EOF" >$apkbuild
+	pkgname=a
+	pkgver=1
+
+	function build() {
+		foo
+	}
+	EOF
+
+	run $cmd $apkbuild
+	[[ $status -eq 1 ]]
+	assert_match "${lines[0]}" "function keyword"
+}
+
+@test 'no space between function name and parenthesis' {
+	cat <<-"EOF" >$apkbuild
+	pkgname=a
+	pkgver=1
+
+	build () {
+		foo
+	}
+	EOF
+
+	run $cmd $apkbuild
+	[[ $status -eq 1 ]]
+	assert_match "${lines[0]}" "before function parenthesis"
+}
+
+@test 'one space after function parenthesis' {
+	cat <<-"EOF" >$apkbuild
+	pkgname=a
+	pkgver=1
+
+	build()  {
+		foo
+	}
+	EOF
+
+	run $cmd $apkbuild
+	[[ $status -eq 1 ]]
+	assert_match "${lines[0]}" "after function parenthesis"
+}
+
+@test 'opening brace for function should be on the same line' {
+	cat <<-"EOF" >$apkbuild
+	pkgname=a
+	pkgver=1
+
+	build()
+	{
+		foo
+	}
+	EOF
+
+	run $cmd $apkbuild
+	[[ $status -eq 1 ]]
+	assert_match "${lines[0]}" "newline before function"
+}
+
+@test 'cd to builddir dir without cd to other dir can be removed' {
+	cat <<-"EOF" >$apkbuild
+	pkgname=a
+	pkgver=1
+
+	build() {
+		cd "$builddir"
+		foo
+	}
+	EOF
+
+	run $cmd $apkbuild
+	[[ $status -eq 1 ]]
+	assert_match "${lines[0]}" "builddir.*can be removed"
+}
+
+# vim: noexpandtab
