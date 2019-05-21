@@ -137,8 +137,8 @@ superfluous_cd_builddir() {
 	# 3. grep for all ocurrences of the 'cd' command (ignore obviously invalid ones
 	#	like matching 'cd' until the end of the line)
 	cds="$(cat -n "$apkbuild" \
-		   | sed -n "/^   [0-9].*\t$phase() {/,/[0-9].*\t}/p" \
-		   | grep '\bcd ')" 
+		   | sed -n "/^\s\+[0-9].*\t$phase() {/,/[0-9].*\t}/p" \
+		   | grep '\bcd ')"
 
 	# Number of ocurrences of the 'cd' command being used
 	# Used to tell if we are in a phase() with a single cd statement
@@ -163,7 +163,7 @@ superfluous_cd_builddir() {
 		[ -z "$statement" ] && continue
 		if echo "$statement" | grep -q 'cd "$builddir"\($\| \)'; then
 			if [ "$prevcd" -eq 1 ] || [ "$cdscount" -eq 1 ]; then
-				printf "%s:%s: cd \"\$builddir\" can be removed in phase '%s'\\n" "$apkbuild" "$linenum" "$phase" 
+				printf "%s:%s: cd \"\$builddir\" can be removed in phase '%s'\\n" "$apkbuild" "$linenum" "$phase"
 			fi
 			prevcd=1
 		else
