@@ -126,7 +126,7 @@ is_travis() {
 	cat <<-"EOF" >$apkbuild
 	pkgname=a
 	pkgver=1
-	foo=
+	foo=example
 	EOF
 
 	run $cmd $apkbuild
