@@ -313,7 +313,7 @@ is_travis() {
 	assert_match "${lines[0]}" "pkgname must not have uppercase characters"
 }
 
-@test 'pkgname must not have -rN' {
+@test 'pkgver must not have -rN' {
 	cat <<-"EOF" >$apkbuild
 	pkgname=foo
 	pkgver=1
@@ -343,6 +343,25 @@ is_travis() {
 	cat <<-"EOF" >$apkbuild
 	pkgname=foo
 	pkgver=02-r3a1
+	EOF
+
+	run $cmd $apkbuild
+	[[ $status -eq 1 ]]
+	assert_match "${lines[0]}" "pkgver must not have -r or _r"
+}
+
+@test 'pkgver can have _rc but not -rc' {
+	cat <<-"EOF" >$apkbuild
+	pkgname=foo
+	pkgver=1_rc1
+	EOF
+
+	run $cmd $apkbuild
+	[[ $status -eq 0 ]]
+
+	cat <<-"EOF" >$apkbuild
+	pkgname=foo
+	pkgver=02-rc1
 	EOF
 
 	run $cmd $apkbuild

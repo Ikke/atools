@@ -180,7 +180,7 @@ pkgname_has_uppercase() {
 
 pkgver_has_pkgrel() {
 	[ "$SKIP_PKGVER_HAS_PKGREL" ] && return 0
-	scan '^pkgver=[A-Za-z0-9_\-\.]*[-_]r' 'pkgver must not have -r or _r'
+	scan '^pkgver=[A-Za-z0-9_\-\.]*(-r|_r(?!c))' 'pkgver must not have -r or _r'
 }
 
 ret=0
