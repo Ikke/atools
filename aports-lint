@@ -65,7 +65,7 @@ find_dupe() {
 
 upper_repo_depends() {
 	[ "$SKIP_UPPER_REPO_DEPENDS" ] && return 0
-	printf "%s\n" "$depends" | tr " " "\n" | sort -u | while read -r pkg; do
+	printf "%s\n" "$depends" | tr " " "\n" | tr -d "\t" | sort -u | while read -r pkg; do
 		for p in $(find_repo "$pkg" "$_repo"); do
 			printf "$apkbuild:: depends '$pkg' is in upper repo '$p'\n"
 		done
@@ -74,7 +74,7 @@ upper_repo_depends() {
 
 duplicate_depends() {
 	[ "$SKIP_DUPLICATE_DEPENDS" ] && return 0
-	printf "%s\n" "$depends" | tr " " "\n" | sort | uniq -d | while read -r dup; do
+	printf "%s\n" "$depends" | tr " " "\n" | tr -d "\t" | sort | uniq -d | while read -r dup; do
 		[ -z "$dup" ] && continue
 		printf "$apkbuild:: duplicate '$dup' in depends\n"
 	done
@@ -82,7 +82,7 @@ duplicate_depends() {
 
 upper_repo_makedepends() {
 	[ "$SKIP_UPPER_REPO_MAKEDEPENDS" ] && return 0
-	printf "%s\n" "$makedepends" | tr " " "\n" | sort -u | while read -r pkg; do
+	printf "%s\n" "$makedepends" | tr " " "\n" | tr -d "\t" | sort -u | while read -r pkg; do
 		for p in $(find_repo "$pkg" "$_repo"); do
 			printf "$apkbuild:: makedepends '$pkg' is in upper repo '$p'\n"
 		done
@@ -91,7 +91,7 @@ upper_repo_makedepends() {
 
 duplicate_makedepends() {
 	[ "$SKIP_DUPLICATE_MAKEDEPENDS" ] && return 0
-	printf "%s\n" "$makedepends" | tr " " "\n" | sort | uniq -d | while read -r dup; do
+	printf "%s\n" "$makedepends" | tr " " "\n" | tr -d "\t" | sort | uniq -d | while read -r dup; do
 		[ -z "$dup" ] && continue
 		printf "$apkbuild:: duplicate '$dup' in makedepends\n"
 	done
@@ -99,7 +99,7 @@ duplicate_makedepends() {
 
 upper_repo_checkdepends() {
 	[ "$SKIP_UPPER_REPO_CHECKDEPENDS" ] && return 0
-	printf "%s\n" "$checkdepends" | tr " " "\n" | sort -u | while read -r pkg; do
+	printf "%s\n" "$checkdepends" | tr " " "\n" | tr -d "\t" | sort -u | while read -r pkg; do
 		for p in $(find_repo "$pkg" "$_repo"); do
 			printf "$apkbuild:: checkdepends '$pkg' is in upper repo '$p'\n"
 		done
@@ -108,7 +108,7 @@ upper_repo_checkdepends() {
 
 duplicate_checkdepends() {
 	[ "$SKIP_DUPLICATE_CHECKDEPENDS" ] && return 0
-	printf "%s\n" "$checkdepends" | tr " " "\n" | sort | uniq -d | while read -r dup; do
+	printf "%s\n" "$checkdepends" | tr " " "\n" | tr -d "\t" | sort | uniq -d | while read -r dup; do
 		[ -z "$dup" ] && continue
 		printf "$apkbuild:: duplicate '$dup' in checkdepends\n"
 	done
@@ -139,8 +139,8 @@ pkgname_dirname_mismatch() {
 depends_makedepends_checkdepends_overlap() {
 	[ "$SKIP_DEPENDS_MAKEDEPENDS_CHECKDEPENDS_OVERLAP" ] && return 0
 	local _mkdeps _ckdeps d
-	_mkdeps="$(echo $makedepends | tr " " "\\n" | sort -u)"
-	_ckdeps="$(echo $checkdepends | tr " " "\\n" | sort -u)"
+	_mkdeps="$(echo $makedepends | tr " " "\\n" | tr -d "\t" | sort -u)"
+	_ckdeps="$(echo $checkdepends | tr " " "\\n" | tr -d "\t" | sort -u)"
 	[ -z "$_mkdeps" ] && [ -z "$_ckdeps" ] && return 0
 	for d in $depends; do
 		if printf "%s\\n" "$_mkdeps" | grep -q "^$d$"; then

@@ -1,3 +1,7 @@
+CHANGES with 11.2:
+
+- make duplicate and upper package detection remove tab chars ('\t') before sorting
+
 CHANGES with 11.1:
 
 - Include NEWS from version 10 to 11
