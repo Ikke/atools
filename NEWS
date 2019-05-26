@@ -1,3 +1,7 @@
+CHANGES with 11.1:
+
+- Include NEWS from version 10 to 11
+
 CHANGES with 11:
 
 - Fix tests for _underscore prefix
