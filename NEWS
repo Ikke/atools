@@ -1,3 +1,13 @@
+CHANGES with 11:
+
+- Fix tests for _underscore prefix
+- deal with _rc being allowed
+
+CHANGES with 10:
+
+- Add makedepend-in-depends
+- Replace makedepends-in-depends with depends-makedepends-checkdepends-overlap
+
 CHANGES with 9:
 
 - Implement build system based on redo (@Ikke)
