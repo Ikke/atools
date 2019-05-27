@@ -179,6 +179,23 @@ is_travis() {
 	assert_match "${lines[0]}" "instead of backticks"
 }
 
+@test 'backticks in comments should be ignored' {
+	skip 'false positive'
+	cat <<-"EOF" >$apkbuild
+	pkgname=a
+	pkgver=1
+
+	build() {
+		# `foo` needs to be executed before bar
+		foo
+		bar
+	}
+	EOF
+
+	run $cmd $apkbuild
+	[[ $status -eq 0 ]]
+}
+
 @test 'function keyword should not be used' {
 	is_travis && skip "Broken on CI"
 	cat <<-"EOF" >$apkbuild
