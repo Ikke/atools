@@ -150,6 +150,9 @@ superfluous_cd_builddir() {
 	# if the previous line had a 'cd "$builddir"' statement
 	prevcd=0
 
+	# If it is the first cd of the program
+	firstcd=1
+
 	# Use newline as our IFS delimiter, so we can iterate over lines with
 	# the for construct, since the while loop will create a subshell that
 	# prevents the value of the prevcd variable from being propagated
@@ -161,14 +164,16 @@ superfluous_cd_builddir() {
 		linenum="$(printf "%s\\n" "$line" | awk '{ print $1 }')"
 		statement="$(printf "%s\\n" "$line" | awk '{ $1="" ; print $0 }')"
 		[ -z "$statement" ] && continue
-		if echo "$statement" | grep -q 'cd "$builddir"\($\| \)'; then
-			if [ "$prevcd" -eq 1 ] || [ "$cdscount" -eq 1 ]; then
+		if echo "$statement" | grep -E -q 'cd ["]?\$[{]?builddir["}]?+($| )' ; then
+			if [ "$prevcd" -eq 1 ] || [ "$cdscount" -eq 1 ] || [ "$firstcd" -eq 1 ]; then
 				printf "%s:%s: cd \"\$builddir\" can be removed in phase '%s'\\n" "$apkbuild" "$linenum" "$phase"
 			fi
 			prevcd=1
 		else
 			prevcd=0
 		fi
+		# Can be set to 0 in the first loop and the re-set it to 0 in any next loops
+		firstcd=0
 	done
 	IFS="$OLDIFS"
 }

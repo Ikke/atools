@@ -1,3 +1,8 @@
+CHANGES with 12:
+
+- superfluous-cd-builddir now detects variations of cd "$builddir" such as with brackets
+  without quotes and any in between
+
 CHANGES with 11.2:
 
 - make duplicate and upper package detection remove tab chars ('\t') before sorting

@@ -60,6 +60,68 @@ is_travis() {
 	[[ $status -eq 0 ]]
 }
 
+@test 'cd \"\$builddir\" with brackets should be detected' {
+	cat <<-"EOF" >$apkbuild
+	pkgname=a
+	pkgver=1
+
+	build() {
+		cd "${builddir}"
+	}
+	EOF
+
+	run $cmd $apkbuild
+	[[ $status -eq 1 ]]
+	assert_match "${lines[0]}" "builddir.*can be removed"
+}
+
+@test 'cd \"\$builddir\" with brackets and no quotes should be detected' {
+	cat <<-"EOF" >$apkbuild
+	pkgname=a
+	pkgver=1
+
+	build() {
+		cd ${builddir}
+	}
+	EOF
+
+	run $cmd $apkbuild
+	[[ $status -eq 1 ]]
+	assert_match "${lines[0]}" "builddir.*can be removed"
+}
+
+@test 'cd \"\$builddir\" without quotes should be detected' {
+	cat <<-"EOF" >$apkbuild
+	pkgname=a
+	pkgver=1
+
+	build() {
+		cd $builddir
+	}
+	EOF
+
+	run $cmd $apkbuild
+	[[ $status -eq 1 ]]
+	assert_match "${lines[0]}" "builddir.*can be removed"
+}
+
+@test 'cd \"\$builddir\" should be highlighted if it is also the first' {
+	cat <<-"EOF" >$apkbuild
+	pkgname=a
+	pkgver=1
+
+	build() {
+		cd $builddir
+		cd ${builddir}
+	}
+	EOF
+
+	run $cmd $apkbuild
+	[[ $status -eq 1 ]]
+	assert_match "${lines[0]}" "builddir.*can be removed"
+	assert_match "${lines[1]}" "builddir.*can be removed"
+}
+
 @test 'unnecessary || return 1 can be removed' {
 	cat <<-"EOF" >$apkbuild
 	pkgname=a
