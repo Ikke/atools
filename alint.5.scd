@@ -88,8 +88,6 @@ A package is present in 2 to 3 of the 3 types of following dependencies: depends
 makedepends and checkdepends. All of them are installed during creation of the package,
 please specify only once in the lowest common denominator location.
 
-## checkdepend-in-depends
-
 # TAGS (apkbuild-lint)
 
 The following tags are used by the *apkbuild-lint* program

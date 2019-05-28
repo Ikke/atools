@@ -1,3 +1,7 @@
+CHANGES with 12.1:
+
+- Remove spurious section referring to a tag that never existed
+
 CHANGES with 12:
 
 - superfluous-cd-builddir now detects variations of cd "$builddir" such as with brackets
