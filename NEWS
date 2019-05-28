@@ -1,3 +1,16 @@
+CHANGES with 13:
+
+- Add tags for each violation in apkbuild-lint
+- Add tags for each violation in aports-lint
+- Update documentation to add each tag to the violation
+- Fix mistake on pkgver-quoted documentation
+- Update documentation to show how to skip tests for certain tags
+- Update tests to check for the tags when using assert_match
+- Convert all output to a draft version of a stable output format
+- Add extra field on the format for the severity
+- Update documentation of the tools to add an OUTPUT chapter
+- Add missing backticks-usage tag to documentation
+
 CHANGES with 12.1:
 
 - Remove spurious section referring to a tag that never existed

@@ -65,64 +65,72 @@ find_dupe() {
 
 upper_repo_depends() {
 	[ "$SKIP_UPPER_REPO_DEPENDS" ] && return 0
+	[ "$SKIP_AL16" ] && return 0
 	printf "%s\n" "$depends" | tr " " "\n" | tr -d "\t" | sort -u | while read -r pkg; do
 		for p in $(find_repo "$pkg" "$_repo"); do
-			printf "$apkbuild:: depends '$pkg' is in upper repo '$p'\n"
+			printf "SC:[AL17]:$apkbuild::depends '$pkg' is in upper repo '$p'\n"
 		done
 	done
 }
 
 duplicate_depends() {
 	[ "$SKIP_DUPLICATE_DEPENDS" ] && return 0
+	[ "$SKIP_AL17" ] && return 0
 	printf "%s\n" "$depends" | tr " " "\n" | tr -d "\t" | sort | uniq -d | while read -r dup; do
 		[ -z "$dup" ] && continue
-		printf "$apkbuild:: duplicate '$dup' in depends\n"
+		printf "MC:[AL17]:$apkbuild::duplicate '$dup' in depends\n"
 	done
 }
 
 upper_repo_makedepends() {
 	[ "$SKIP_UPPER_REPO_MAKEDEPENDS" ] && return 0
+	[ "$SKIP_AL18" ] && return 0
 	printf "%s\n" "$makedepends" | tr " " "\n" | tr -d "\t" | sort -u | while read -r pkg; do
 		for p in $(find_repo "$pkg" "$_repo"); do
-			printf "$apkbuild:: makedepends '$pkg' is in upper repo '$p'\n"
+			printf "SC:[AL18]:$apkbuild::makedepends '$pkg' is in upper repo '$p'\n"
 		done
 	done
 }
 
 duplicate_makedepends() {
 	[ "$SKIP_DUPLICATE_MAKEDEPENDS" ] && return 0
+	[ "$SKIP_AL19" ] && return 0
 	printf "%s\n" "$makedepends" | tr " " "\n" | tr -d "\t" | sort | uniq -d | while read -r dup; do
 		[ -z "$dup" ] && continue
-		printf "$apkbuild:: duplicate '$dup' in makedepends\n"
+		printf "MC:[AL19]:$apkbuild::duplicate '$dup' in makedepends\n"
 	done
 }
 
 upper_repo_checkdepends() {
 	[ "$SKIP_UPPER_REPO_CHECKDEPENDS" ] && return 0
+	[ "$SKIP_AL20" ] && return 0
 	printf "%s\n" "$checkdepends" | tr " " "\n" | tr -d "\t" | sort -u | while read -r pkg; do
 		for p in $(find_repo "$pkg" "$_repo"); do
-			printf "$apkbuild:: checkdepends '$pkg' is in upper repo '$p'\n"
+			printf "SC:[AL20]:$apkbuild::checkdepends '$pkg' is in upper repo '$p'\n"
 		done
 	done
 }
 
 duplicate_checkdepends() {
 	[ "$SKIP_DUPLICATE_CHECKDEPENDS" ] && return 0
+	[ "$SKIP_AL21" ] && return 0
 	printf "%s\n" "$checkdepends" | tr " " "\n" | tr -d "\t" | sort | uniq -d | while read -r dup; do
 		[ -z "$dup" ] && continue
-		printf "$apkbuild:: duplicate '$dup' in checkdepends\n"
+		printf "MC:[AL21]:$apkbuild::duplicate '$dup' in checkdepends\n"
 	done
 }
 
 duplicate_package() {
 	[ "$SKIP_DUPLICATE_PACKAGE" ] && return 0
+	[ "$SKIP_AL22" ] && return 0
 	for _r in $(find_dupe "$pkgname" "$_repo"); do
-		printf "$apkbuild:: package is already present in $_r\n"
+		printf "SC:[AL22]:$apkbuild::package is already present in $_r\n"
 	done
 }
 
 pkgname_dirname_mismatch() {
 	[ "$SKIP_PKGNAME_DIRNAME_MISMATCH" ] && return 0
+	[ "$SKIP_AL23" ] && return 0
 	local _dirname=
 	case "${apkbuild%%/*}" in
 		main|community|testing|unmaintained|non-free)
@@ -132,25 +140,26 @@ pkgname_dirname_mismatch() {
 		*) return 0 ;;
 	esac
 	if [ "$pkgname" != "$_dirname" ]; then
-		printf "$apkbuild:: pkgname is '$pkgname' but is in directory '$_dirname'\n"
+		printf "IC:[AL23]:$apkbuild::pkgname is '$pkgname' but is in directory '$_dirname'\n"
 	fi
 }
 
 depends_makedepends_checkdepends_overlap() {
 	[ "$SKIP_DEPENDS_MAKEDEPENDS_CHECKDEPENDS_OVERLAP" ] && return 0
+	[ "$SKIP_AL24" ] && return 0
 	local _mkdeps _ckdeps d
 	_mkdeps="$(echo $makedepends | tr " " "\\n" | tr -d "\t" | sort -u)"
 	_ckdeps="$(echo $checkdepends | tr " " "\\n" | tr -d "\t" | sort -u)"
 	[ -z "$_mkdeps" ] && [ -z "$_ckdeps" ] && return 0
 	for d in $depends; do
 		if printf "%s\\n" "$_mkdeps" | grep -q "^$d$"; then
-			printf "%s:: dependency '%s' is in depends and makedepends\n" "$apkbuild" "$d"
+			printf "IC:[AL24]:%s::dependency '%s' is in depends and makedepends\n" "$apkbuild" "$d"
 		fi
 
 		# Don't check against checkdepends if it is empty
 		[ -z "$checkdepends" ] && continue
 		if printf "%s\\n" "$_ckdeps" | grep -q "^$d$"; then
-			printf "%s:: dependency '%s' is in depends and checkdepends\n" "$apkbuild" "$d"
+			printf "IC:[AL24]:%s::dependency '%s' is in depends and checkdepends\n" "$apkbuild" "$d"
 		fi
 	done
 
@@ -159,7 +168,7 @@ depends_makedepends_checkdepends_overlap() {
 	[ -z "$checkdepends" ] && return 0
 	for d in $makedepends; do
 		if printf "%s\\n" "$_ckdeps" | grep -q "^$d$"; then
-			printf "%s:: dependency '%s' is in makedepends and checkdepends\n" "$apkbuild" "$d"
+			printf "IC:[AL24]:%s::dependency '%s' is in makedepends and checkdepends\n" "$apkbuild" "$d"
 		fi
 	done
 }

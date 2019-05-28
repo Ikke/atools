@@ -11,9 +11,9 @@
 export LC_ALL=C
 
 scan() {
-	local rx="$1" msg="$2"
+	local rx="$1" msg="$2" tag="$3" severity="$4"
 	grep -P -Hn -e "$rx" "$apkbuild" |
-		sed "s/^\([^:]*:[^:]*:\)\(.*\)/\1 $msg/"
+		sed "s/^\([^:]*:[^:]*:\)\(.*\)/$severity:[$tag]:\1$msg/"
 }
 
 variables=$(echo -n "#.*
@@ -61,74 +61,88 @@ url" | tr '\n' '|')
 
 default_builddir_value() {
 	[ "$SKIP_DEFAULT_BUILDDIR_VALUE" ] && return 0
+	[ "$SKIP_AL1" ] && return 0
 	if [ "$builddir" = "/$pkgname-$pkgver" ]; then
-		scan '^builddir=' "builddir can be removed as it is the default value"
+		scan '^builddir=' "builddir can be removed as it is the default value" 'AL1' 'IC'
 	fi
 }
 
 unnecessary_return_1() {
 	[ "$SKIP_UNNECESSARY_RETURN_1" ] && return 0
-	scan '\|\| return 1' "|| return 1 is not required as set -e is used"
+	[ "$SKIP_AL2" ] && return 0
+	scan '\|\| return 1' "|| return 1 is not required as set -e is used" 'AL2' 'MC'
 }
 
 pkgname_quoted() {
 	[ "$SKIP_PKGNAME_QUOTED" ] && return 0
-	scan '^pkgname="[^$]+"' "pkgname must not be quoted"
+	[ "$SKIP_AL3" ] && return 0
+	scan '^pkgname="[^$]+"' "pkgname must not be quoted" 'AL3' 'MP'
 }
 
 pkgver_quoted() {
 	[ "$SKIP_PKGVER_QUOTED" ] && return 0
-	scan '^pkgver="[^$]+"' "pkgver must not be quoted"
+	[ "$SKIP_AL4" ] && return 0
+	scan '^pkgver="[^$]+"' "pkgver must not be quoted" 'AL4' 'MP'
 }
 
 empty_variable() {
 	[ "$SKIP_EMPTY_VARIABLE" ] && return 0
-	scan '^[A-Za-z0-9_]*=(""|''|)$' "variable set to empty string: \2"
+	[ "$SKIP_AL5" ] && return 0
+	scan '^[A-Za-z0-9_]*=(""|''|)$' "variable set to empty string: \2" 'AL5' 'MC'
 }
 
 custom_variable() {
 	[ "$SKIP_CUSTOM_VARIABLE" ] && return 0
+	[ "$SKIP_AL6" ] && return 0
 	scan '^(?!\s*^('"$variables"'))[^\s=-]+=' \
-		"prefix custom variable with _: \2"
+		"prefix custom variable with _: \2" 'AL6' 'IC'
 }
 
 indent_tabs() {
 	[ "$SKIP_INDENT_TABS" ] && return 0
-	scan '^  ' "indent with tabs"
+	[ "$SKIP_AL7" ] && return 0
+	scan '^  ' "indent with tabs" 'AL7' 'IC'
 }
 
 trailing_whitespace() {
 	[ "$SKIP_TRAILING_WHITESPACE" ] && return 0
-	scan '[\t ]$' "trailing whitespace"
+	[ "$SKIP_AL8" ] && return 0
+	scan '[\t ]$' "trailing whitespace" 'AL8' 'IC'
 }
 
 backticks_usage() {
 	[ "$SKIP_BACKTICKS_USAGE" ] && return 0
-	scan '[^\\]`' "use \$() instead of backticks"
+	[ "$SKIP_AL25" ] && return 0
+	scan '[^\\]`' "use \$() instead of backticks" 'AL25' 'SP'
 }
 
 function_keyword() {
 	[ "$SKIP_FUNCTION_KEYWORD" ] && return 0
-	scan '^\t*function\b' 'do not use the function keyword'
+	[ "$SKIP_AL9" ] && return 0
+	scan '^\t*function\b' 'do not use the function keyword' 'AL9' 'SC'
 }
 
 space_before_function_parenthesis() {
 	[ "$SKIP_SPACE_BEFORE_FUNCTION_PARENTHESIS" ] && return 0
-	scan '^\t*[^ ]*  *\(\)' 'do not use space before function parenthesis'
+	[ "$SKIP_AL10" ] && return 0
+	scan '^\t*[^ ]*  *\(\)' 'do not use space before function parenthesis' 'AL10' 'E'
 }
 
 space_after_function_parenthesis() {
 	[ "$SKIP_SPACE_AFTER_FUNCTION_PARENTHESIS" ] && return 0
-	scan '^\t*[^ ]*\(\)(|   *){' 'use one space after function parenthesis'
+	[ "$SKIP_AL11" ] && return 0
+	scan '^\t*[^ ]*\(\)(|   *){' 'use one space after function parenthesis' 'AL11' 'E'
 }
 
 newline_opening_brace() {
 	[ "$SKIP_NEWLINE_OPENING_BRACE" ] && return 0
-	scan '^\t*[^ ]*\(\)$' 'do not use a newline before function opening brace'
+	[ "$SKIP_AL12" ] && return 0
+	scan '^\t*[^ ]*\(\)$' 'do not use a newline before function opening brace' 'AL12' 'E'
 }
 
 superfluous_cd_builddir() {
 	[ "$SKIP_SUPERFLUOUS_CD_BUILDDIR" ] && return 0
+	[ "$SKIP_AL13" ] && return 0
 	local cds= cdscount= prevcd= phase="$1"
 
 	# All ocurrences of the 'cd' command being used
@@ -166,7 +180,10 @@ superfluous_cd_builddir() {
 		[ -z "$statement" ] && continue
 		if echo "$statement" | grep -E -q 'cd ["]?\$[{]?builddir["}]?+($| )' ; then
 			if [ "$prevcd" -eq 1 ] || [ "$cdscount" -eq 1 ] || [ "$firstcd" -eq 1 ]; then
-				printf "%s:%s: cd \"\$builddir\" can be removed in phase '%s'\\n" "$apkbuild" "$linenum" "$phase"
+				printf "W:[AL13]:%s:%s:cd \"\$builddir\" can be removed in phase '%s'\\n" \
+					"$apkbuild" \
+					"$linenum" \
+					"$phase"
 			fi
 			prevcd=1
 		else
@@ -180,12 +197,14 @@ superfluous_cd_builddir() {
 
 pkgname_has_uppercase() {
 	[ "$SKIP_PKGNAME_HAS_UPPERCASE" ] && return 0
-	scan '^pkgname=[a-z0-9\._\-]*[A-Z]' 'pkgname must not have uppercase characters'
+	[ "$SKIP_AL14" ] && return 0
+	scan '^pkgname=[a-z0-9\._\-]*[A-Z]' 'pkgname must not have uppercase characters' 'AL14' 'E'
 }
 
 pkgver_has_pkgrel() {
 	[ "$SKIP_PKGVER_HAS_PKGREL" ] && return 0
-	scan '^pkgver=[A-Za-z0-9_\-\.]*(-r|_r(?!c))' 'pkgver must not have -r or _r'
+	[ "$SKIP_AL15" ] && return 0
+	scan '^pkgver=[A-Za-z0-9_\-\.]*(-r|_r(?!c))' 'pkgver must not have -r or _r' 'AL15' 'E'
 }
 
 ret=0
@@ -220,6 +239,6 @@ for apkbuild; do
 	wait
 	else
 	echo no such apkbuild "$apkbuild" 1>&2
-	fi | sort -t: -n -k2 | grep . && ret=1
+	fi | sort -t: -V | grep . && ret=1
 done
 exit $ret

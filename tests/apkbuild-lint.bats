@@ -27,7 +27,7 @@ is_travis() {
 
 	run $cmd $apkbuild
 	[[ $status -eq 1 ]]
-	assert_match "${lines[0]}" "builddir"
+	assert_match "${lines[0]}" "\[AL1\].*:builddir can be removed as it is the default value"
 }
 
 @test 'cd \"\$builddir\" is not highlighted' {
@@ -72,7 +72,7 @@ is_travis() {
 
 	run $cmd $apkbuild
 	[[ $status -eq 1 ]]
-	assert_match "${lines[0]}" "builddir.*can be removed"
+	assert_match "${lines[0]}" "\[AL13\].*builddir\" can be removed in phase"
 }
 
 @test 'cd \"\$builddir\" with brackets and no quotes should be detected' {
@@ -87,7 +87,7 @@ is_travis() {
 
 	run $cmd $apkbuild
 	[[ $status -eq 1 ]]
-	assert_match "${lines[0]}" "builddir.*can be removed"
+	assert_match "${lines[0]}" "\[AL13\].*builddir\" can be removed in phase"
 }
 
 @test 'cd \"\$builddir\" without quotes should be detected' {
@@ -102,7 +102,7 @@ is_travis() {
 
 	run $cmd $apkbuild
 	[[ $status -eq 1 ]]
-	assert_match "${lines[0]}" "builddir.*can be removed"
+	assert_match "${lines[0]}" "\[AL13\].*builddir\" can be removed in phase"
 }
 
 @test 'cd \"\$builddir\" should be highlighted if it is also the first' {
@@ -118,8 +118,8 @@ is_travis() {
 
 	run $cmd $apkbuild
 	[[ $status -eq 1 ]]
-	assert_match "${lines[0]}" "builddir.*can be removed"
-	assert_match "${lines[1]}" "builddir.*can be removed"
+	assert_match "${lines[0]}" "\[AL13\].*builddir\" can be removed in phase"
+	assert_match "${lines[1]}" "\[AL13\].*builddir\" can be removed in phase"
 }
 
 @test 'unnecessary || return 1 can be removed' {
@@ -134,7 +134,7 @@ is_travis() {
 
 	run $cmd $apkbuild
 	[[ $status -eq 1 ]]
-	assert_match "${lines[0]}" "return 1"
+	assert_match "${lines[0]}" "\[AL2\].*|| return 1 is not required as set -e is used"
 }
 
 @test 'plain pkgname should not be quoted' {
@@ -145,7 +145,7 @@ is_travis() {
 
 	run $cmd $apkbuild
 	[[ $status -eq 1 ]]
-	assert_match "${lines[0]}" "pkgname.*quoted"
+	assert_match "${lines[0]}" "\[AL3\].*:pkgname must not be quoted"
 }
 
 @test 'quoted composed pkgname is fine' {
@@ -169,7 +169,7 @@ is_travis() {
 
 	run $cmd $apkbuild
 	[[ $status -eq 1 ]]
-	assert_match "${lines[0]}" "pkgver.*quoted"
+	assert_match "${lines[0]}" "\[AL4\].*:pkgver must not be quoted"
 }
 
 @test 'empty global variable can be removed' {
@@ -181,7 +181,7 @@ is_travis() {
 
 	run $cmd $apkbuild
 	[[ $status -eq 1 ]]
-	assert_match "${lines[0]}" "variable.*empty"
+	assert_match "${lines[0]}" "\[AL5\].*:variable set to empty string: "
 }
 
 @test 'custom global variables should start with an underscore' {
@@ -193,7 +193,7 @@ is_travis() {
 
 	run $cmd $apkbuild
 	[[ $status -eq 1 ]]
-	assert_match "${lines[0]}" "prefix.*_"
+	assert_match "${lines[0]}" "\[AL6\].*:prefix custom variable with _: "
 }
 
 @test 'indentation should be with tabs' {
@@ -208,7 +208,7 @@ is_travis() {
 
 	run $cmd $apkbuild
 	[[ $status -eq 1 ]]
-	assert_match "${lines[0]}" "indent.*tabs"
+	assert_match "${lines[0]}" "\[AL7\].*:indent with tabs"
 }
 
 @test 'trailing whitespace should be removed' {
@@ -223,7 +223,7 @@ is_travis() {
 
 	run $cmd $apkbuild
 	[[ $status -eq 1 ]]
-	assert_match "${lines[0]}" "trailing whitespace"
+	assert_match "${lines[0]}" "\[AL8\].*:trailing whitespace"
 }
 
 @test 'prefer \$() to backticks' {
@@ -238,7 +238,7 @@ is_travis() {
 
 	run $cmd $apkbuild
 	[[ $status -eq 1 ]]
-	assert_match "${lines[0]}" "instead of backticks"
+	assert_match "${lines[0]}" "\[AL25\].*:use.*instead of backticks"
 }
 
 @test 'backticks in comments should be ignored' {
@@ -271,7 +271,7 @@ is_travis() {
 
 	run $cmd $apkbuild
 	[[ $status -eq 1 ]]
-	assert_match "${lines[0]}" "function keyword"
+	assert_match "${lines[0]}" "\[AL9\].*:do not use the function keyword"
 }
 
 @test 'no space between function name and parenthesis' {
@@ -286,7 +286,7 @@ is_travis() {
 
 	run $cmd $apkbuild
 	[[ $status -eq 1 ]]
-	assert_match "${lines[0]}" "before function parenthesis"
+	assert_match "${lines[0]}" "\[AL10\].*:do not use space before function parenthesis"
 }
 
 @test 'one space after function parenthesis' {
@@ -301,7 +301,7 @@ is_travis() {
 
 	run $cmd $apkbuild
 	[[ $status -eq 1 ]]
-	assert_match "${lines[0]}" "after function parenthesis"
+	assert_match "${lines[0]}" "\[AL11\].*:use one space after function parenthesis"
 }
 
 @test 'opening brace for function should be on the same line' {
@@ -317,7 +317,7 @@ is_travis() {
 
 	run $cmd $apkbuild
 	[[ $status -eq 1 ]]
-	assert_match "${lines[0]}" "newline before function"
+	assert_match "${lines[0]}" "\[AL12\].*:do not use a newline before function opening brace"
 }
 
 @test 'cd to builddir dir without cd to other dir can be removed' {
@@ -333,7 +333,7 @@ is_travis() {
 
 	run $cmd $apkbuild
 	[[ $status -eq 1 ]]
-	assert_match "${lines[0]}" "builddir.*can be removed"
+	assert_match "${lines[0]}" "\[AL13\].*builddir.*can be removed in phase"
 }
 
 @test 'pkgname must not have uppercase characters' {
@@ -350,7 +350,7 @@ is_travis() {
 
 	run $cmd $apkbuild
 	[[ $status -eq 1 ]]
-	assert_match "${lines[0]}" "pkgname must not have uppercase characters"
+	assert_match "${lines[0]}" "\[AL14\].*:pkgname must not have uppercase characters"
 
 	cat <<-"EOF" >$apkbuild
 	pkgname=foo-FONT
@@ -358,7 +358,7 @@ is_travis() {
 
 	run $cmd $apkbuild
 	[[ $status -eq 1 ]]
-	assert_match "${lines[0]}" "pkgname must not have uppercase characters"
+	assert_match "${lines[0]}" "\[AL14\].*:pkgname must not have uppercase characters"
 
 	cat <<-"EOF" >$apkbuild
 	pkgname=f_oO
@@ -366,14 +366,14 @@ is_travis() {
 
 	run $cmd $apkbuild
 	[[ $status -eq 1 ]]
-	assert_match "${lines[0]}" "pkgname must not have uppercase characters"
+	assert_match "${lines[0]}" "\[AL14\].*:pkgname must not have uppercase characters"
 	cat <<-"EOF" >$apkbuild
 	pkgname=f.o.O
 	EOF
 
 	run $cmd $apkbuild
 	[[ $status -eq 1 ]]
-	assert_match "${lines[0]}" "pkgname must not have uppercase characters"
+	assert_match "${lines[0]}" "\[AL14\].*:pkgname must not have uppercase characters"
 
 	cat <<-"EOF" >$apkbuild
 	pkgname=9Foo
@@ -381,7 +381,7 @@ is_travis() {
 
 	run $cmd $apkbuild
 	[[ $status -eq 1 ]]
-	assert_match "${lines[0]}" "pkgname must not have uppercase characters"
+	assert_match "${lines[0]}" "\[AL14\].*:pkgname must not have uppercase characters"
 
 	cat <<-"EOF" >$apkbuild
 	pkgname=FoO
@@ -389,7 +389,7 @@ is_travis() {
 
 	run $cmd $apkbuild
 	[[ $status -eq 1 ]]
-	assert_match "${lines[0]}" "pkgname must not have uppercase characters"
+	assert_match "${lines[0]}" "\[AL14\].*:pkgname must not have uppercase characters"
 }
 
 @test 'pkgver must not have -rN' {
@@ -408,7 +408,7 @@ is_travis() {
 
 	run $cmd $apkbuild
 	[[ $status -eq 1 ]]
-	assert_match "${lines[0]}" "pkgver must not have -r or _r"
+	assert_match "${lines[0]}" "\[AL15\].*:pkgver must not have -r or _r"
 
 	cat <<-"EOF" >$apkbuild
 	pkgname=foo
@@ -417,7 +417,7 @@ is_travis() {
 
 	run $cmd $apkbuild
 	[[ $status -eq 1 ]]
-	assert_match "${lines[0]}" "pkgver must not have -r or _r"
+	assert_match "${lines[0]}" "\[AL15\].*:pkgver must not have -r or _r"
 
 	cat <<-"EOF" >$apkbuild
 	pkgname=foo
@@ -426,7 +426,7 @@ is_travis() {
 
 	run $cmd $apkbuild
 	[[ $status -eq 1 ]]
-	assert_match "${lines[0]}" "pkgver must not have -r or _r"
+	assert_match "${lines[0]}" "\[AL15\].*:pkgver must not have -r or _r"
 }
 
 @test 'pkgver can have _rc but not -rc' {
@@ -445,7 +445,7 @@ is_travis() {
 
 	run $cmd $apkbuild
 	[[ $status -eq 1 ]]
-	assert_match "${lines[0]}" "pkgver must not have -r or _r"
+	assert_match "${lines[0]}" "\[AL15\].*:pkgver must not have -r or _r"
 }
 
 # vim: noexpandtab
