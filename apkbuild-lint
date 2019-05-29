@@ -125,19 +125,19 @@ function_keyword() {
 space_before_function_parenthesis() {
 	[ "$SKIP_SPACE_BEFORE_FUNCTION_PARENTHESIS" ] && return 0
 	[ "$SKIP_AL10" ] && return 0
-	scan '^\t*[^ ]*  *\(\)' 'do not use space before function parenthesis' 'AL10' 'E'
+	scan '^\t*[^ ]*  *\(\)' 'do not use space before function parenthesis' 'AL10' 'IC'
 }
 
 space_after_function_parenthesis() {
 	[ "$SKIP_SPACE_AFTER_FUNCTION_PARENTHESIS" ] && return 0
 	[ "$SKIP_AL11" ] && return 0
-	scan '^\t*[^ ]*\(\)(|   *){' 'use one space after function parenthesis' 'AL11' 'E'
+	scan '^\t*[^ ]*\(\)(|   *){' 'use one space after function parenthesis' 'AL11' 'IC'
 }
 
 newline_opening_brace() {
 	[ "$SKIP_NEWLINE_OPENING_BRACE" ] && return 0
 	[ "$SKIP_AL12" ] && return 0
-	scan '^\t*[^ ]*\(\)$' 'do not use a newline before function opening brace' 'AL12' 'E'
+	scan '^\t*[^ ]*\(\)$' 'do not use a newline before function opening brace' 'AL12' 'IC'
 }
 
 superfluous_cd_builddir() {
@@ -180,7 +180,7 @@ superfluous_cd_builddir() {
 		[ -z "$statement" ] && continue
 		if echo "$statement" | grep -E -q 'cd ["]?\$[{]?builddir["}]?+($| )' ; then
 			if [ "$prevcd" -eq 1 ] || [ "$cdscount" -eq 1 ] || [ "$firstcd" -eq 1 ]; then
-				printf "W:[AL13]:%s:%s:cd \"\$builddir\" can be removed in phase '%s'\\n" \
+				printf "IP:[AL13]:%s:%s:cd \"\$builddir\" can be removed in phase '%s'\\n" \
 					"$apkbuild" \
 					"$linenum" \
 					"$phase"
@@ -198,13 +198,13 @@ superfluous_cd_builddir() {
 pkgname_has_uppercase() {
 	[ "$SKIP_PKGNAME_HAS_UPPERCASE" ] && return 0
 	[ "$SKIP_AL14" ] && return 0
-	scan '^pkgname=[a-z0-9\._\-]*[A-Z]' 'pkgname must not have uppercase characters' 'AL14' 'E'
+	scan '^pkgname=[a-z0-9\._\-]*[A-Z]' 'pkgname must not have uppercase characters' 'AL14' 'SC'
 }
 
 pkgver_has_pkgrel() {
 	[ "$SKIP_PKGVER_HAS_PKGREL" ] && return 0
 	[ "$SKIP_AL15" ] && return 0
-	scan '^pkgver=[A-Za-z0-9_\-\.]*(-r|_r(?!c))' 'pkgver must not have -r or _r' 'AL15' 'E'
+	scan '^pkgver=[A-Za-z0-9_\-\.]*(-r|_r(?!c))' 'pkgver must not have -r or _r' 'AL15' 'SC'
 }
 
 ret=0
