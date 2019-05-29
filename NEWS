@@ -1,3 +1,7 @@
+CHANGES with 14:
+
+- Add _builddir-is-set test
+
 CHANGES with 13:
 
 - Add tags for each violation in apkbuild-lint

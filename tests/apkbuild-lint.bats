@@ -448,4 +448,32 @@ is_travis() {
 	assert_match "${lines[0]}" "\[AL15\].*:pkgver must not have -r or _r"
 }
 
+@test '_builddir is set' {
+	cat <<-"EOF" >$apkbuild
+	pkgname=foo
+	_realname=Foo
+	pkgver=1.0.0
+
+	_builddir="$srcdir/$_realname-$pkgver"
+	EOF
+
+	run $cmd $apkbuild
+	[[ $status -eq 1 ]]
+	assert_match "${lines[0]}" "\[AL26\].*:rename _builddir to builddir"
+}
+
+@test '_builddir and builddir are set' {
+	cat <<-"EOF" >$apkbuild
+	pkgname=foo
+	_realname=Foo
+	pkgver=1.0.0
+
+	builddir="$srcdir/$_realname-$pkgver"
+	_builddir="$builddir/build"
+	EOF
+
+	run $cmd $apkbuild
+	[[ $status -eq 0 ]]
+}
+
 # vim: noexpandtab

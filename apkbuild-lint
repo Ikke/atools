@@ -207,6 +207,14 @@ pkgver_has_pkgrel() {
 	scan '^pkgver=[A-Za-z0-9_\-\.]*(-r|_r(?!c))' 'pkgver must not have -r or _r' 'AL15' 'SC'
 }
 
+_builddir_is_set() {
+	[ "$SKIP__BUILDDIR_IS_SET" ] && return 0
+	[ "$SKIP_AL26" ] && return 0
+	if [ -z "$builddir" ] && [ -n "$_builddir" ]; then
+		scan '^_builddir=' 'rename _builddir to builddir' 'AL26' 'SP'
+	fi
+}
+
 ret=0
 for apkbuild; do
 	if [ -f "$apkbuild" ]; then
@@ -214,6 +222,7 @@ for apkbuild; do
 	# Source apkbuild, we need some nice values
 	srcdir="" . "$apkbuild"
 	default_builddir_value &
+	_builddir_is_set &
 
 	unnecessary_return_1 &
 	pkgname_quoted &
