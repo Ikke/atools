@@ -220,7 +220,10 @@ for apkbuild; do
 	if [ -f "$apkbuild" ]; then
 
 	# Source apkbuild, we need some nice values
-	srcdir="" . "$apkbuild"
+	srcdir="" . "$apkbuild" || {
+		echo "Failed to source APKBUILD in '$apkbuild'" ;
+		continue
+	}
 	default_builddir_value &
 	_builddir_is_set &
 

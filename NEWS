@@ -1,3 +1,7 @@
+CHANGES with 15:
+
+- Skip to next loop of checking if we can't source the APKBUILD
+
 CHANGES with 14:
 
 - Add _builddir-is-set test
