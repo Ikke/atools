@@ -237,7 +237,7 @@ space.
 
 Severity: Important, Certainty: Certain
 
-## space after-function-parenthesis [AL11]
+## space-after-function-parenthesis [AL11]
 
 The APKBUILD doesn't have a space after the function parenthesis or has more
 than one space. Use only one space after the function parenthesis.
