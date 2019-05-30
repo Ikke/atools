@@ -279,6 +279,6 @@ Severity: Serious, Certainty: Certain
 ## _builddir-is-set [AL26]
 
 _builddir is set instead of builddir, which is an old variable from before builddir
-existed as as concept understood by abuild
+existed as a concept understood by abuild
 
 Severity: Serious, Certainty: Certain
