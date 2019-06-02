@@ -212,7 +212,7 @@ for apkbuild; do
 	fi
 
 	if [ ! -z "$checkdepends" ]; then
-		if [ ! -z "${options##*!check*}" ]; then
+		if [ -z "$options" ] || [ ! -z "${options##*!check*}" ]; then
 			upper_repo_checkdepends &
 		fi
 		duplicate_checkdepends &
