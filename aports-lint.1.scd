@@ -31,6 +31,14 @@ following format
 - *PATH* refers to the path given for *apkbuild-lint* to check.
 - *MSG* is a short message meant for humans to know what is the violation.
 
+# EXPENSIVE FIND REPO
+
+A slower yet more accurate version of the internal find_repo function used to detect
+whether a package is present in an upper repo can be accessed by setting the
+*EXPENSIVE_FIND_REPO* variable. Using it will cause time needed to process an APKBUILD
+to jump from miliseconds to seconds and is not recommended if providing feedback to the
+user in a timely manner is required (like running this as a vim ALE plugin).
+
 # AUTHORS
 
 Maintained by Leo <thinkabit.ukim@gmail.com>
