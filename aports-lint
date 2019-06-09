@@ -1,6 +1,54 @@
 #!/bin/sh
 export LC_ALL=C
 
+# Define find_repo using 'apk' which is slow and costly when the
+# user wants it.
+#
+# Times go up from 0.02 for community/gcc6/APKBUILD to 3.26
+if [ "$EXPENSIVE_FIND_REPO" ]; then
+
+find_repo() {
+	[ -z "$1" ] || [ -z "$2" ] && return 0
+
+	local pkgname="$1" 
+	# Repo the package we are linting currently is. We want it
+	# for avoiding checks on repos we don't want
+	local targetrepo="$2"
+
+	# Unmaintained is the top of the ladder, it can depend on any
+	# of the steps below
+	if [ "$targetrepo" = "unmaintained" ]; then
+		return 0
+	fi
+
+	# Search for the --origin of a package, matching the given name --exactly
+	pkgname="$(apk search --origin --exact "$pkgname" \
+			 | rev \
+			 | cut -d -f3- 2>/dev/null \
+			 | rev)"
+
+	# If we found nothing just ignore it
+	[ -z "$pkgname" ] && return 0
+
+	check_in_repo() { test -d "$1"/"$2" && echo "$1" ; }
+
+	case "$targetrepo" in
+		testing) 
+			check_in_repo unmaintained "$pkgname"
+			;;
+		community)
+			check_in_repo unmaintained "$pkgname"
+			check_in_repo testing "$pkgname"
+			;;
+		main)
+			check_in_repo unmaintained "$pkgname"
+			check_in_repo testing "$pkgname"
+			check_in_repo community "$pkgname"
+			;;
+	esac
+}
+else
+
 # Finds from which repo a package comes from
 # it can return multiple values if it finds multiple matches
 find_repo() {
@@ -51,6 +99,7 @@ find_repo() {
 			;;
 	esac
 }
+fi
 
 find_dupe() {
 	local pkgname="$1" repo="$2" r=
