@@ -63,7 +63,7 @@ default_builddir_value() {
 	[ "$SKIP_DEFAULT_BUILDDIR_VALUE" ] && return 0
 	[ "$SKIP_AL1" ] && return 0
 	if [ "$builddir" = "/$pkgname-$pkgver" ]; then
-		scan '^builddir=' "builddir can be removed as it is the default value" 'AL1' 'IC'
+		scan '^builddir=' "builddir can be removed as it is the default value" 'AL1' 'MC'
 	fi
 }
 
@@ -180,7 +180,7 @@ superfluous_cd_builddir() {
 		[ -z "$statement" ] && continue
 		if echo "$statement" | grep -E -q 'cd ["]?\$[{]?builddir["}]?+($| )' ; then
 			if [ "$prevcd" -eq 1 ] || [ "$cdscount" -eq 1 ] || [ "$firstcd" -eq 1 ]; then
-				printf "IP:[AL13]:%s:%s:cd \"\$builddir\" can be removed in phase '%s'\\n" \
+				printf "MP:[AL13]:%s:%s:cd \"\$builddir\" can be removed in phase '%s'\\n" \
 					"$apkbuild" \
 					"$linenum" \
 					"$phase"

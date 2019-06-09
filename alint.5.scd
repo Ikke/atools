@@ -153,7 +153,7 @@ The *builddir* declaration can be removed.
 
 Starting with v2.29.0 of *abuild* the value is set automatically.
 
-Severity: Important, Certainty: Certain
+Severity: Minor, Certainty: Certain
 
 ## unnecessary-return-1 [AL2]
 
@@ -261,7 +261,7 @@ functions automatically have their working directory set to the value of
 *builddir*. It is also possible that there are 2 *cd "$builddir"* statements
 one after the other.
 
-Severity: Important, Certainty: Possible
+Severity: Minor, Certainty: Possible
 
 ## pkgname-has-uppercase [AL14]
 
