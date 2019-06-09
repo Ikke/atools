@@ -1,3 +1,8 @@
+CHANGES in 15.4:
+
+- Add more expensive but more accurate find_repo for finding packages in upper repos
+- Mark default-builddir-value and superfluous-cd-builddir as minor
+
 CHANGES in 15.3:
 
 - Fix upper-repo-checkdepends detection when options= is empty
