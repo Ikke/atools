@@ -282,3 +282,9 @@ Severity: Serious, Certainty: Certain
 existed as a concept understood by abuild
 
 Severity: Serious, Certainty: Certain
+
+## line-above-80-chars [AL27]
+
+A line has above 80 chars, hard-wrap it, if reasonable.
+
+Severity: Minor, Certainty: Possible
