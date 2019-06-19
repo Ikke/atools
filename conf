@@ -1,3 +1,3 @@
 MAN_5_PAGES="alint.5.man"
-MAN_1_PAGES="apkbuild-lint.1.man aports-lint.1.man"
-BINARIES="apkbuild-lint aports-lint"
+MAN_1_PAGES="apkbuild-lint.1.man aports-lint.1.man apkbuild-fixer.1.man"
+BINARIES="apkbuild-lint aports-lint apkbuild-fixer"
