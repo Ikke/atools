@@ -247,7 +247,8 @@ for apkbuild; do
 	newline_opening_brace &
 	pkgname_has_uppercase &
 	pkgver_has_pkgrel &
-	line_above_80_chars &
+	# NOTE(Leo): Breaks 100% of packages due to sha512sums=, work around it
+	#	line_above_80_chars &
 
 	# Don't perform these checks on packages from main
 	if ! [ -z "${apkbuild##*main/*}" ]; then
