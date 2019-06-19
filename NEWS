@@ -1,3 +1,8 @@
+CHANGES in 17.0:
+
+- Add apkbuild-fixer
+- Disable line-above-80-chars until it can be fixed
+
 CHANGES in 16.0:
 
 - add line-above-80-chars
