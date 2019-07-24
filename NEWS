@@ -1,3 +1,7 @@
+CHANGES In 17.2:
+
+- Remove line-above-80-chars [AL27], it was broken anyways
+
 CHANGES in 17.1:
 
 - Update build system to install apkbuild-fixer
