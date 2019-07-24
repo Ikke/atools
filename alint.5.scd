@@ -40,6 +40,10 @@ Won't cause any issues, are specific style issues pertinent to a concerned devel
 or contributor. the _APKBUILD\_STYLE_ variable can be set to a specific value to enable
 a subset of checks that the specific developer or user uses.
 
+When a check belongs to this category this manual page also provides information on which
+developers use a specific style check as developers can sometimes both want to have the
+same check done on their own style.
+
 Current valid values are:
 
 - leo (style linting for leo)
@@ -180,11 +184,19 @@ The APKBUILD's *pkgname* variable is quoted. It must not be quoted.
 
 Severity: Style, Certainty: Possible
 
+Present in the _APKBUILD\_STYLE_ of:
+
+- leo
+
 ## pkgver-quoted [AL4]
 
 The APKBUILD's *pkgver* variable is quoted. It must not be quoted.
 
 Severity: Style, Certainty: Possible
+
+Present in the _APKBUILD\_STYLE_ of:
+
+- leo
 
 ## empty-variable [AL5]
 
@@ -247,12 +259,20 @@ space.
 
 Severity: Style, Certainty: Certain
 
+Present in the _APKBUILD\_STYLE_ of:
+
+- leo
+
 ## space-after-function-parenthesis [AL11]
 
 The APKBUILD doesn't have a space after the function parenthesis or has more
 than one space. Use only one space after the function parenthesis.
 
 Severity: Style, Certainty: Certain
+
+Present in the _APKBUILD\_STYLE_ of:
+
+- leo
 
 ## newline-opening-brace [AL12]
 
@@ -261,6 +281,10 @@ opening brace in the same line as the declaration with one space after the
 function parenthesis.
 
 Severity: Style, Certainty: Certain
+
+Present in the _APKBUILD\_STYLE_ of:
+
+- leo
 
 ## superfluous-cd-builddir [AL13]
 
