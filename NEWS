@@ -1,6 +1,9 @@
 CHANGES In 17.2:
 
 - Remove line-above-80-chars [AL27], it was broken anyways
+- Check for the APKBUILD file instead of just the directory
+ when trying to find duplicates and packages in other repos.
+ Fixing a case where remants of a moved package would stay there.
 
 CHANGES in 17.1:
 

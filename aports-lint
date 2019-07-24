@@ -30,7 +30,7 @@ find_repo() {
 	# If we found nothing just ignore it
 	[ -z "$pkgname" ] && return 0
 
-	check_in_repo() { test -d "$1"/"$2" && echo "$1" ; }
+	check_in_repo() { test -f "$1"/"$2"/APKBUILD && echo "$1" ; }
 
 	case "$targetrepo" in
 		testing) 
@@ -82,7 +82,7 @@ find_repo() {
 	pkgname="${pkgname%-static}"
 	pkgname="${pkgname%-lang}"
 
-	check_in_repo() { test -d "$1"/"$2" && echo "$1" ; }
+	check_in_repo() { test -f "$1"/"$2"/APKBUILD && echo "$1" ; }
 
 	case "$targetrepo" in
 		testing) 
@@ -104,7 +104,7 @@ fi
 find_dupe() {
 	local pkgname="$1" repo="$2" r=
 
-	check_in_repo() { test -d "$1"/"$2" && echo "$1" ; }
+	check_in_repo() { test -f "$1"/"$2"/APKBUILD && echo "$1" ; }
 
 	for r in unmaintained testing community main; do
 		[ "$r" = "$repo" ] && continue
