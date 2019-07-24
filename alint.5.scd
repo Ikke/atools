@@ -32,7 +32,9 @@ situations. Should be fixed soon.
 ## Minor (M)
 
 Won't directly cause issues during build or when the package is delivered to users.
-Should be fixed when convenient
+Should be fixed when convenient.
+
+This also holds style issues that are dictated on the CODINGSTYLE.md file.
 
 ## STYLE (T)
 
@@ -257,22 +259,14 @@ The APKBUILD has a space character between the name of a function
 and the paranthesis that denote it is a function. Remove the superfluous
 space.
 
-Severity: Style, Certainty: Certain
-
-Present in the _APKBUILD\_STYLE_ of:
-
-- leo
+Severity: MInor, Certainty: Certain
 
 ## space-after-function-parenthesis [AL11]
 
 The APKBUILD doesn't have a space after the function parenthesis or has more
 than one space. Use only one space after the function parenthesis.
 
-Severity: Style, Certainty: Certain
-
-Present in the _APKBUILD\_STYLE_ of:
-
-- leo
+Severity: Minor, Certainty: Certain
 
 ## newline-opening-brace [AL12]
 
@@ -280,11 +274,7 @@ The APKBUILD has a newline before the opening brace of a function. Put the
 opening brace in the same line as the declaration with one space after the
 function parenthesis.
 
-Severity: Style, Certainty: Certain
-
-Present in the _APKBUILD\_STYLE_ of:
-
-- leo
+Severity: Minor, Certainty: Certain
 
 ## superfluous-cd-builddir [AL13]
 

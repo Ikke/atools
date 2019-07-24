@@ -219,9 +219,6 @@ _run_apkbuild_leo() {
 	# Run all tests from Leo
 	pkgname_quoted &
 	pkgver_quoted &
-	space_before_function_parenthesis &
-	space_after_function_parenthesis &
-	newline_opening_brace &
 }
 
 ret=0
@@ -248,6 +245,9 @@ for apkbuild; do
 	function_keyword &
 	pkgname_has_uppercase &
 	pkgver_has_pkgrel &
+	space_before_function_parenthesis &
+	space_after_function_parenthesis &
+	newline_opening_brace &
 
 	# Don't perform these checks on packages from main
 	if ! [ -z "${apkbuild##*main/*}" ]; then

@@ -1,3 +1,8 @@
+CHANGES in 18.1:
+
+- Move some style checks that belonged to leo to minor since they are
+ now part of the CODINGSTYLE.md
+
 CHANGES in 18.0:
 
 - Add a Style severity label denoted by a T character
