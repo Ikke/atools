@@ -1,3 +1,8 @@
+CHANGES in 18.0:
+
+- Add a Style severity label denoted by a T character
+- Add leo to APKBUILD_STYLE options and move some style checks to it
+
 CHANGES In 17.2:
 
 - Remove line-above-80-chars [AL27], it was broken anyways

@@ -143,7 +143,7 @@ is_travis() {
 	pkgver=1
 	EOF
 
-	run $cmd $apkbuild
+	APKBUILD_STYLE=leo run $cmd $apkbuild
 	[[ $status -eq 1 ]]
 	assert_match "${lines[0]}" "\[AL3\].*:pkgname must not be quoted"
 }
@@ -157,7 +157,7 @@ is_travis() {
 	pkgver=1
 	EOF
 
-	run $cmd $apkbuild
+	APKBUILD_STYLE=leo run $cmd $apkbuild
 	[[ $status -eq 0 ]]
 }
 
@@ -167,7 +167,7 @@ is_travis() {
 	pkgver="1"
 	EOF
 
-	run $cmd $apkbuild
+	APKBUILD_STYLE=leo run $cmd $apkbuild
 	[[ $status -eq 1 ]]
 	assert_match "${lines[0]}" "\[AL4\].*:pkgver must not be quoted"
 }
@@ -284,7 +284,7 @@ is_travis() {
 	}
 	EOF
 
-	run $cmd $apkbuild
+	APKBUILD_STYLE=leo run $cmd $apkbuild
 	[[ $status -eq 1 ]]
 	assert_match "${lines[0]}" "\[AL10\].*:do not use space before function parenthesis"
 }
@@ -299,7 +299,7 @@ is_travis() {
 	}
 	EOF
 
-	run $cmd $apkbuild
+	APKBUILD_STYLE=leo run $cmd $apkbuild
 	[[ $status -eq 1 ]]
 	assert_match "${lines[0]}" "\[AL11\].*:use one space after function parenthesis"
 }
@@ -315,7 +315,7 @@ is_travis() {
 	}
 	EOF
 
-	run $cmd $apkbuild
+	APKBUILD_STYLE=leo run $cmd $apkbuild
 	[[ $status -eq 1 ]]
 	assert_match "${lines[0]}" "\[AL12\].*:do not use a newline before function opening brace"
 }

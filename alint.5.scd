@@ -34,6 +34,16 @@ situations. Should be fixed soon.
 Won't directly cause issues during build or when the package is delivered to users.
 Should be fixed when convenient
 
+## STYLE (T)
+
+Won't cause any issues, are specific style issues pertinent to a concerned developer
+or contributor. the _APKBUILD\_STYLE_ variable can be set to a specific value to enable
+a subset of checks that the specific developer or user uses.
+
+Current valid values are:
+
+- leo (style linting for leo)
+
 # Certainty
 
 Certainty is assigned to each tag and indicates how certain a test is that the violation
@@ -168,13 +178,13 @@ Severity: Minor, Certainity: Certain
 
 The APKBUILD's *pkgname* variable is quoted. It must not be quoted.
 
-Severity: Minor, Certainty: Possible
+Severity: Style, Certainty: Possible
 
 ## pkgver-quoted [AL4]
 
 The APKBUILD's *pkgver* variable is quoted. It must not be quoted.
 
-Severity: Minor, Certainty: Possible
+Severity: Style, Certainty: Possible
 
 ## empty-variable [AL5]
 
@@ -235,14 +245,14 @@ The APKBUILD has a space character between the name of a function
 and the paranthesis that denote it is a function. Remove the superfluous
 space.
 
-Severity: Important, Certainty: Certain
+Severity: Style, Certainty: Certain
 
 ## space-after-function-parenthesis [AL11]
 
 The APKBUILD doesn't have a space after the function parenthesis or has more
 than one space. Use only one space after the function parenthesis.
 
-Severity: Important, Certainty: Certain
+Severity: Style, Certainty: Certain
 
 ## newline-opening-brace [AL12]
 
@@ -250,7 +260,7 @@ The APKBUILD has a newline before the opening brace of a function. Put the
 opening brace in the same line as the declaration with one space after the
 function parenthesis.
 
-Severity: Important, Certainty: Certain
+Severity: Style, Certainty: Certain
 
 ## superfluous-cd-builddir [AL13]
 

@@ -74,15 +74,17 @@ unnecessary_return_1() {
 }
 
 pkgname_quoted() {
+	[ "$APKBUILD_STYLE" != "leo" ] && return 0
 	[ "$SKIP_PKGNAME_QUOTED" ] && return 0
 	[ "$SKIP_AL3" ] && return 0
-	scan '^pkgname="[^$]+"' "pkgname must not be quoted" 'AL3' 'MP'
+	scan '^pkgname="[^$]+"' "pkgname must not be quoted" 'AL3' 'TP'
 }
 
 pkgver_quoted() {
+	[ "$APKBUILD_STYLE" != "leo" ] && return 0
 	[ "$SKIP_PKGVER_QUOTED" ] && return 0
 	[ "$SKIP_AL4" ] && return 0
-	scan '^pkgver="[^$]+"' "pkgver must not be quoted" 'AL4' 'MP'
+	scan '^pkgver="[^$]+"' "pkgver must not be quoted" 'AL4' 'TP'
 }
 
 empty_variable() {
@@ -123,21 +125,24 @@ function_keyword() {
 }
 
 space_before_function_parenthesis() {
+	[ "$APKBUILD_STYLE" != "leo" ] && return 0
 	[ "$SKIP_SPACE_BEFORE_FUNCTION_PARENTHESIS" ] && return 0
 	[ "$SKIP_AL10" ] && return 0
-	scan '^\t*[^ ]*  *\(\)' 'do not use space before function parenthesis' 'AL10' 'IC'
+	scan '^\t*[^ ]*  *\(\)' 'do not use space before function parenthesis' 'AL10' 'TC'
 }
 
 space_after_function_parenthesis() {
+	[ "$APKBUILD_STYLE" != "leo" ] && return 0
 	[ "$SKIP_SPACE_AFTER_FUNCTION_PARENTHESIS" ] && return 0
 	[ "$SKIP_AL11" ] && return 0
-	scan '^\t*[^ ]*\(\)(|   *){' 'use one space after function parenthesis' 'AL11' 'IC'
+	scan '^\t*[^ ]*\(\)(|   *){' 'use one space after function parenthesis' 'AL11' 'TC'
 }
 
 newline_opening_brace() {
+	[ "$APKBUILD_STYLE" != "leo" ] && return 0
 	[ "$SKIP_NEWLINE_OPENING_BRACE" ] && return 0
 	[ "$SKIP_AL12" ] && return 0
-	scan '^\t*[^ ]*\(\)$' 'do not use a newline before function opening brace' 'AL12' 'IC'
+	scan '^\t*[^ ]*\(\)$' 'do not use a newline before function opening brace' 'AL12' 'TC'
 }
 
 superfluous_cd_builddir() {
