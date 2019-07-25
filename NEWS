@@ -1,3 +1,8 @@
+CHANGES in 18.2:
+
+- remove APKBUILD_STYLE=leo from some tests for checks that are now part
+ of the main suite
+
 CHANGES in 18.1:
 
 - Move some style checks that belonged to leo to minor since they are

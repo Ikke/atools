@@ -284,7 +284,7 @@ is_travis() {
 	}
 	EOF
 
-	APKBUILD_STYLE=leo run $cmd $apkbuild
+	run $cmd $apkbuild
 	[[ $status -eq 1 ]]
 	assert_match "${lines[0]}" "\[AL10\].*:do not use space before function parenthesis"
 }
@@ -299,7 +299,7 @@ is_travis() {
 	}
 	EOF
 
-	APKBUILD_STYLE=leo run $cmd $apkbuild
+	run $cmd $apkbuild
 	[[ $status -eq 1 ]]
 	assert_match "${lines[0]}" "\[AL11\].*:use one space after function parenthesis"
 }
@@ -315,7 +315,7 @@ is_travis() {
 	}
 	EOF
 
-	APKBUILD_STYLE=leo run $cmd $apkbuild
+	run $cmd $apkbuild
 	[[ $status -eq 1 ]]
 	assert_match "${lines[0]}" "\[AL12\].*:do not use a newline before function opening brace"
 }
