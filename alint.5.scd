@@ -303,6 +303,12 @@ Severity: Serious, Certainty: Certain
 ## _builddir-is-set [AL26]
 
 \_builddir is set instead of builddir, which is an old variable from before builddir
-existed as a concept understood by abuild
+existed as a concept understood by abuild.
 
 Severity: Serious, Certainty: Certain
+
+## literal-integer-is-quoted [AL28]
+
+A variable declaration containing only integers should not be quoted.
+
+Severity: Minor,  Certainty: Certain

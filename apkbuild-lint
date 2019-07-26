@@ -215,6 +215,12 @@ _builddir_is_set() {
 	fi
 }
 
+literal_integer_is_quoted() {
+	[ "$SKIP_LITERAL_INTEGER_IS_QUOTED" ] && return 0
+	[ "$SKIP_AL28" ] && return 0
+	scan '^[A-Za-z0-9_]*=('\''|")[0-9]+("|'\'')' 'literal integers must not be quoted' 'AL28' 'MC'
+}
+
 _run_apkbuild_leo() {
 	# Run all tests from Leo
 	pkgname_quoted &
@@ -248,6 +254,7 @@ for apkbuild; do
 	space_before_function_parenthesis &
 	space_after_function_parenthesis &
 	newline_opening_brace &
+	literal_integer_is_quoted &
 
 	# Don't perform these checks on packages from main
 	if ! [ -z "${apkbuild##*main/*}" ]; then

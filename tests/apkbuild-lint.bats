@@ -164,7 +164,7 @@ is_travis() {
 @test 'pkgver should not be quoted' {
 	cat <<-"EOF" >$apkbuild
 	pkgname=a
-	pkgver="1"
+	pkgver="aa"
 	EOF
 
 	APKBUILD_STYLE=leo run $cmd $apkbuild
@@ -470,6 +470,62 @@ is_travis() {
 
 	builddir="$srcdir/$_realname-$pkgver"
 	_builddir="$builddir/build"
+	EOF
+
+	run $cmd $apkbuild
+	[[ $status -eq 0 ]]
+}
+
+@test 'pkgver is literal integer but is double-quoted' {
+	cat <<-"EOF" >$apkbuild
+	pkgver="1"
+	EOF
+
+	run $cmd $apkbuild
+	[[ $status -eq 1 ]]
+	assert_match "${lines[0]}" "\[AL28\].*:literal integers must not be quoted"
+}
+
+@test 'pkgver is literal integer but is single-quoted' {
+	cat <<-"EOF" >$apkbuild
+	pkgver='1'
+	EOF
+
+	run $cmd $apkbuild
+	[[ $status -eq 1 ]]
+	assert_match "${lines[0]}" "\[AL28\].*:literal integers must not be quoted"
+}
+
+@test 'pkgver is literal integer and is not quoted' {
+	cat <<-"EOF" >$apkbuild
+	pkgver=2
+	EOF
+
+	run $cmd $apkbuild
+	[[ $status -eq 0 ]]
+}
+
+@test 'pkgver is not an literal integer and is double-quoted' {
+	cat <<-"EOF" >$apkbuild
+	pkgver="1.0"
+	EOF
+
+	run $cmd $apkbuild
+	[[ $status -eq 0 ]]
+}
+
+@test 'pkgver is not an literal integer and is single-quoted' {
+	cat <<-"EOF" >$apkbuild
+	pkgver='1.0'
+	EOF
+
+	run $cmd $apkbuild
+	[[ $status -eq 0 ]]
+}
+
+@test 'pkgver is not an literal integer and is not quoted' {
+	cat <<-"EOF" >$apkbuild
+	pkgver=1.0
 	EOF
 
 	run $cmd $apkbuild
