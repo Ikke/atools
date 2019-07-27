@@ -237,7 +237,7 @@ Trailing whitespace is superfluous.
 
 Severity: Important, Certainty: Certain
 
-# backticks-usage [AL25]
+## backticks-usage [AL25]
 
 The APKBUILD uses backticks for running a shell command, use `$()` instead.
 

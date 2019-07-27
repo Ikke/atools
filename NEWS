@@ -1,3 +1,7 @@
+CHANGES in 18.3:
+
+- Fix backticks-usage header on alint.5
+
 CHANGES in 18.2:
 
 - Remove APKBUILD_STYLE=leo from some tests for checks that are now part
