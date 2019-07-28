@@ -532,4 +532,23 @@ is_travis() {
 	[[ $status -eq 0 ]]
 }
 
+@test '\"\$pkgname\" can be used as archive name in source' {
+	cat <<-"EOF" >$apkbuild
+	source="\$pkgname-$pkver.tar.gz::http://domain.com/my_package/\$pkgver.tar.gz"
+	EOF
+
+	run $cmd $apkbuild
+	[[ $status -eq 0 ]]
+}
+
+@test '\"\$pkgname\" should not be used in source url' {
+	cat <<-"EOF" >$apkbuild
+	source="http://domain.com/\$pkgname/\$pkgver"
+	EOF
+
+	run $cmd $apkbuild
+	[[ $status -eq 1 ]]
+	assert_match "${lines[0]}" "\[AL29\].*:.*$pkgname should not be used in the source url"
+}
+
 # vim: noexpandtab

@@ -221,6 +221,12 @@ literal_integer_is_quoted() {
 	scan '^[A-Za-z0-9_]*=('\''|")[0-9]+("|'\'')' 'literal integers must not be quoted' 'AL28' 'MC'
 }
 
+pkgname_used_in_source() {
+    [ "$SKIP_PKGNAME_USED_IN_SOURCE" ] && return 0
+    [ "$SKIP_AL29" ] && return 0
+    scan '^source="[a-z]+://[^"]+\$\{?pkgname\}?' '$pkgname should not be used in the source url' 'AL29' 'MC'
+}
+
 _run_apkbuild_leo() {
 	# Run all tests from Leo
 	pkgname_quoted &
@@ -255,6 +261,7 @@ for apkbuild; do
 	space_after_function_parenthesis &
 	newline_opening_brace &
 	literal_integer_is_quoted &
+	pkgname_used_in_source &
 
 	# Don't perform these checks on packages from main
 	if ! [ -z "${apkbuild##*main/*}" ]; then

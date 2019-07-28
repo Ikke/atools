@@ -312,3 +312,14 @@ Severity: Serious, Certainty: Certain
 A variable declaration containing only integers should not be quoted.
 
 Severity: Minor,  Certainty: Certain
+
+## pkgname-used-in-source [AL29]
+
+"$pkgname" is used in the source url. This tightly couples the pkgname to the
+upstream name, which makes it harder to rename packages or create specialized /
+variants of packages.
+
+Instead, use the upstream name fully written out. This only counts for the url
+itself, not the local archive name prefix.
+
+Severity: Minor, Certainty: Certain
